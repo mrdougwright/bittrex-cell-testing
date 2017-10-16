@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
     <title>Bittrex API with Cell.js</title>
     <script src="https://www.celljs.org/cell.js"></script>
   </head>
   <body>
-    <table>
-      <thead>
-        <th>Market Name</th>
-        <th>Volume</th>
-        <th>Bid</th>
-        <th>Created</th>
-      </thead>
+    <table style="margin: 20px;">
+      <thead id="header"></thead>
       <tbody id='bittrex'></tbody>
     </table>
 
     <script>
+    const renderComponent = (type, text) => ({ $type: type, $text: text })
+    const responseHeaders = ["MarketName", "Volume", "Bid", "OpenBuyOrders", "Created"]
+
+    var header = {
+      $cell: true,
+      id: "header",
+      $type: "thead",
+      $components: responseHeaders.map(h => renderComponent('th', h)),
+    }
+
     var bittrexData = {
       $cell: true,
       id: "bittrex",
@@ -34,12 +38,7 @@
       _template: function(item) {
         return {
           $type: "tr",
-          $components: [
-            { $type: "td", $text: item.MarketName },
-            { $type: "td", $text: item.Volume },
-            { $type: "td", $text: item.Bid },
-            { $type: "td", $text: item.Created },
-          ]
+          $components: responseHeaders.map(h => renderComponent('td', item[h])),
         }
       },
     }
