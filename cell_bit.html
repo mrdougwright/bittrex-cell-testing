@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bittrex API with Cell.js</title>
+    <script src="https://www.celljs.org/cell.js"></script>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <th>Market Name</th>
+        <th>Volume</th>
+        <th>Bid</th>
+        <th>Created</th>
+      </thead>
+      <tbody id='bittrex'></tbody>
+    </table>
+
+    <script>
+    var bittrexData = {
+      $cell: true,
+      id: "bittrex",
+      $type: "tbody",
+      $init: function() { this._bittrex() },
+      $update: function() { this.$components = this._items.map(this._template) },
+      _items: [],
+      _bittrex: function() {
+        fetch("https://bittrex.com/api/v1.1/public/getmarketsummaries")
+          .then(res => res.json())
+          .then(obj => obj.result)
+          .then(data => this._refresh(data))
+      },
+      _refresh: function(result) { this._items = result },
+      _template: function(item) {
+        return {
+          $type: "tr",
+          $components: [
+            { $type: "td", $text: item.MarketName },
+            { $type: "td", $text: item.Volume },
+            { $type: "td", $text: item.Bid },
+            { $type: "td", $text: item.Created },
+          ]
+        }
+      },
+    }
+    </script>
+  </body>
+</html>

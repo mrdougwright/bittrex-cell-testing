@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Demo Cell</title>
+    <script src="https://www.celljs.org/cell.js"></script>
+  </head>
+  <body>
+    <script>
+      var el1 = {
+        $cell: true,
+        style: "font-family: Helvetica; color: #333;",
+        $type: "h1",
+        $text: 'the year of the cell'
+      }
+
+      var el2 = {
+        $cell: true,
+        $type: "a",
+        style: "padding: 10px; margin-bottom: 10px;",
+        href: "#",
+        $text: "Click Me",
+        onclick: function(e) { this._next() },
+        _next: function() {
+          this.innerText === "Restart!" ? this._index = 0 : this._index++
+          this.$text = this._items[this._index]
+        },
+        _index: 0,
+        _items: ["Click Me", "javascript", "Jane-c", "ruby", "java", "lisp", "Restart!"]
+      }
+
+      Coffee = ["Blue Bottle", "Four Barrel", "Philz", "Intelligentsia"]
+      Item = function(brand) {
+        return { $type: "div", $text: brand, class: "row" }
+      }
+
+      var el3 = {
+        $cell: true,
+        style: "padding: 10px; margin-bottom: 10px;",
+        class: "container",
+        $components: Coffee.map(Item)
+      }
+
+      var ಠᴥಠ = {
+        $cell: true,
+        $type: "button",
+        $text: "Button",
+        onclick: function(e){
+          alert("clicked!");
+        }
+      }
+
+      var el = {
+        $cell: 'is so cool!',
+        style: "font-family: Helvetica; font-size: 14px;",
+        $components: [
+          {
+            $type: "input",
+            type: "text",
+            placeholder: "Type something and press enter",
+            style: "width: 100%; outline: none; padding: 5px;",
+            $init: function(e) { this.focus() },
+            onkeyup: function(e) {
+              if(e.keyCode === 13) {
+                document.querySelector("#list")._add(this.value);
+                this.value = "";
+              }
+            }
+          },
+          {
+            $type: "ol",
+            $components: [],
+            $init: function(e) {
+              var components = this.$components
+              JSON
+                .parse(window.sessionStorage.getItem('components'))
+                .map(function(item) {
+                  components.push(item)
+                })
+            },
+            id: "list",
+            _items: [],
+            _add: function(val) { this._items.push(val) },
+            $update: function() {
+              this.$components = this._items.map(function(item) {
+                return { $type: "li", $text: item }
+              })
+              var components = JSON.stringify(this.$components)
+              window.sessionStorage.setItem('components', components)
+            }
+          }
+        ]
+      }
+    </script>
+  </body>
+</html>
