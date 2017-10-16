@@ -5,31 +5,24 @@
     <script src="https://www.celljs.org/cell.js"></script>
   </head>
   <body>
-    <table style="margin: 20px;">
-      <thead id="header"></thead>
-      <tbody id='bittrex'></tbody>
-    </table>
-
-    <script>
+  <script>
     const renderComponent = (type, text) => ({ $type: type, $text: text })
     const responseHeaders = ["MarketName", "Volume", "Bid", "OpenBuyOrders", "Created"]
 
     var header = {
       $cell: true,
-      id: "header",
       $type: "thead",
       $components: responseHeaders.map(h => renderComponent('th', h)),
     }
 
     var bittrexData = {
       $cell: true,
-      id: "bittrex",
       $type: "tbody",
       $init: function() { this._bittrex() },
       $update: function() { this.$components = this._items.map(this._template) },
       _items: [],
       _bittrex: function() {
-        fetch("https://bittrex.com/api/v1.1/public/getmarketsummaries")
+        fetch("https://bittrex.com/api/v1.1/public/getmarketsummaries", {})
           .then(res => res.json())
           .then(obj => obj.result)
           .then(data => this._refresh(data))
@@ -42,6 +35,6 @@
         }
       },
     }
-    </script>
+  </script>
   </body>
 </html>
