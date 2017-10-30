@@ -7,7 +7,8 @@
   <body>
   <script>
     const renderComponent = (type, text) => ({ $type: type, $text: text })
-    const responseHeaders = ["MarketName", "Volume", "Bid", "OpenBuyOrders", "Created"]
+    const responseHeaders = ["Market Name", "Volume", "Bid", "Open Buy Orders", "Created"]
+    const concatWord = (word) => word.split(" ").reduce((a,b) => a.concat(b))
 
     var header = {
       $cell: true,
@@ -31,7 +32,8 @@
       _template: function(item) {
         return {
           $type: "tr",
-          $components: responseHeaders.map(h => renderComponent('td', item[h])),
+          $components: responseHeaders.map(concatWord)
+                                      .map(h => renderComponent('td', item[h])),
         }
       },
     }
