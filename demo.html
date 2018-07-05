@@ -68,25 +68,25 @@
             }
           },
           {
+            id: "list",
             $type: "ol",
             $components: [],
+            _items: [],
             $init: function(e) {
               var components = this.$components
-              JSON
-                .parse(window.sessionStorage.getItem('components'))
-                .map(function(item) {
-                  components.push(item)
-                })
+              var stored = window.sessionStorage.getItem('components')
+              JSON.parse(stored).map(function(item) {
+                components.push(item)
+              })
+              this._items = components.map(function(c) { return c.$text })
             },
-            id: "list",
-            _items: [],
             _add: function(val) { this._items.push(val) },
             $update: function() {
               this.$components = this._items.map(function(item) {
                 return { $type: "li", $text: item }
               })
-              var components = JSON.stringify(this.$components)
-              window.sessionStorage.setItem('components', components)
+              var stored = JSON.stringify(this.$components)
+              window.sessionStorage.setItem('components', stored)
             }
           }
         ]
